@@ -38,13 +38,15 @@
     "library",
     "template"
   ],
-  "repository": "https://github.com/victorsoares96/lib-template",
+  "repository": {
+    "url": "https://github.com/victorsoares96/epubjs-react-native-expo-file-system"
+  },
   "author": "Victor Soares <vitorsoares96@hotmail.com> (https://github.com/victorsoares96)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/victorsoares96/lib-template/issues"
+    "url": "https://github.com/victorsoares96/epubjs-react-native-expo-file-system/issues"
   },
-  "homepage": "https://github.com/victorsoares96/lib-template#readme",
+  "homepage": "https://github.com/victorsoares96/epubjs-react-native-expo-file-system#readme",
   "resolutions": {
     "@types/react": "18.2.66"
   },
