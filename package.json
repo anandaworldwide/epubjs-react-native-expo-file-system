@@ -39,7 +39,7 @@
     "template"
   ],
   "repository": {
-    "url": "https://github.com/victorsoares96/epubjs-react-native-expo-file-system"
+    "url": "git+https://github.com/victorsoares96/epubjs-react-native-expo-file-system.git"
   },
   "author": "Victor Soares <vitorsoares96@hotmail.com> (https://github.com/victorsoares96)",
   "license": "MIT",
