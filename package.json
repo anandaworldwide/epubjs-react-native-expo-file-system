@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@types/react": "18.2.66",
-    "@types/jest": "29.5.12",
+    "@types/jest": "29.5.14",
     "@typescript-eslint/eslint-plugin": "7.2.0",
     "@typescript-eslint/parser": "7.2.0",
     "commitizen": "4.3.0",
