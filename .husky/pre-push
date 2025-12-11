@@ -1,0 +1,15 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/common.sh"
+
+[ -n "$CI" ] && exit 0
+
+# Verify build is up to date
+echo "Verifying build..."
+npm run build
+
+# Check if dist has uncommitted changes
+if ! git diff --quiet dist/; then
+  echo "Error: dist/ has uncommitted changes after build. Please commit them first."
+  exit 1
+fi
