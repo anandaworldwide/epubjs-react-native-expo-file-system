@@ -1,9 +1,12 @@
 import { useCallback, useState } from 'react';
-import * as ExpoFileSystem from 'expo-file-system';
-import type { DownloadProgressData } from 'expo-file-system';
-import type { FileInfo, FileSystem } from './types';
+import * as FileSystem from 'expo-file-system/legacy';
+import type {
+  DownloadProgressData,
+  FileInfo as ExpoFileInfo,
+} from 'expo-file-system/legacy';
+import type { FileSystem as FileSystemType } from './types';
 
-export function useFileSystem(): FileSystem {
+export function useFileSystem(): FileSystemType {
   const [file, setFile] = useState<string | null>(null);
   const [progress, setProgress] = useState<number>(0);
   const [downloading, setDownloading] = useState<boolean>(false);
@@ -12,6 +15,8 @@ export function useFileSystem(): FileSystem {
   const [success, setSuccess] = useState<boolean>(false);
 
   const downloadFile = useCallback((fromUrl: string, toFile: string) => {
+    const destPath = FileSystem.documentDirectory + toFile;
+
     const callback = (downloadProgress: DownloadProgressData) => {
       const currentProgress = Math.round(
         (downloadProgress.totalBytesWritten /
@@ -21,9 +26,9 @@ export function useFileSystem(): FileSystem {
       setProgress(currentProgress);
     };
 
-    const downloadResumable = ExpoFileSystem.createDownloadResumable(
+    const downloadResumable = FileSystem.createDownloadResumable(
       fromUrl,
-      ExpoFileSystem.documentDirectory + toFile,
+      destPath,
       { cache: true },
       callback
     );
@@ -44,7 +49,7 @@ export function useFileSystem(): FileSystem {
 
         return { uri: value.uri, mimeType: value.mimeType };
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         if (err instanceof Error) {
           setError(err.message);
         } else setError('Error downloading file');
@@ -55,18 +60,13 @@ export function useFileSystem(): FileSystem {
   }, []);
 
   const getFileInfo = useCallback(async (fileUri: string) => {
-    const {
-      uri,
-      exists,
-      isDirectory,
-      size: fileSize,
-    } = (await ExpoFileSystem.getInfoAsync(fileUri)) as FileInfo;
+    const result = (await FileSystem.getInfoAsync(fileUri)) as ExpoFileInfo;
 
     return {
-      uri,
-      exists,
-      isDirectory,
-      size: fileSize,
+      uri: result.uri,
+      exists: result.exists,
+      isDirectory: result.isDirectory,
+      size: result.exists ? result.size : undefined,
     };
   }, []);
 
@@ -77,12 +77,12 @@ export function useFileSystem(): FileSystem {
     size,
     error,
     success,
-    documentDirectory: ExpoFileSystem.documentDirectory,
-    cacheDirectory: ExpoFileSystem.cacheDirectory,
-    bundleDirectory: ExpoFileSystem.bundleDirectory || undefined,
-    readAsStringAsync: ExpoFileSystem.readAsStringAsync,
-    writeAsStringAsync: ExpoFileSystem.writeAsStringAsync,
-    deleteAsync: ExpoFileSystem.deleteAsync,
+    documentDirectory: FileSystem.documentDirectory,
+    cacheDirectory: FileSystem.cacheDirectory,
+    bundleDirectory: FileSystem.bundleDirectory || undefined,
+    readAsStringAsync: FileSystem.readAsStringAsync,
+    writeAsStringAsync: FileSystem.writeAsStringAsync,
+    deleteAsync: FileSystem.deleteAsync,
     downloadFile,
     getFileInfo,
   };
